@@ -12,7 +12,7 @@ app.use(express.json());
 
 
 
-app.post("/productos", async (req, res) => {
+app.post("/producto", async (req, res) => {
 
   const { nombre, descripcion, precio, imagen } = req.body;
 
@@ -42,7 +42,7 @@ app.post("/productos", async (req, res) => {
 
 });
 
-app.delete("/productos/:id", async (req, res) => {
+app.delete("/producto/:id", async (req, res) => {
 
   try {
 
@@ -93,63 +93,6 @@ app.put("/pedidos/:id/estado", async (req, res) => {
 
 app.get('/', (req, res) => {
     res.json({ message: 'Backend funcionando correctamente' });
-});
-
-app.get('/api/productos/promedio-por-categoria', async (req, res) => {
-    try {
-        const [results] = await sequelize.query(`
-            SELECT 
-                categoryCode as categoria,
-                AVG(value) as promedio
-            FROM producto
-            WHERE value > 0 AND categoryCode != ''
-            GROUP BY categoryCode
-            ORDER BY promedio DESC
-        `);
-
-        res.json(results);
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ 
-            message: 'Error al obtener datos', 
-            error: error.message 
-        });
-    }
-});
-
-app.get('/api/productos/cantidad-por-marca', async (req, res) => {
-    try {
-        const [results] = await sequelize.query(`
-            SELECT 
-                brandCode as marca,
-                COUNT(*) as cantidad
-            FROM producto
-            WHERE brandCode != ''
-            GROUP BY brandCode
-            ORDER BY cantidad DESC
-        `);
-
-        res.json(results);
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ 
-            message: 'Error al obtener datos', 
-            error: error.message 
-        });
-    }
-});
-
-app.get('/api/productos/todos', async (req, res) => {
-    try {
-        const productos = await Producto.findAll();
-        res.json(productos);
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ 
-            message: 'Error al obtener productos', 
-            error: error.message 
-        });
-    }
 });
 
 
